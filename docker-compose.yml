@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: petstore
+    ports:
+      - '5432:5432'

@@ -6,6 +6,6 @@ module.exports = {
         return catalog;
     },
     async getProductById(id) {
-        return catalog.find(product => product.id == id);
+        return catalog.find(product => product.id === id);
     }
 };
