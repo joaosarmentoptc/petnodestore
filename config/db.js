@@ -11,6 +11,7 @@ class Database {
             this.sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
                 host: dbConfig.host,
                 dialect: dbConfig.dialect,
+                port: dbConfig.port
             });
 
             Database.instance = this;
