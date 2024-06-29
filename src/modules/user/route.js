@@ -4,6 +4,7 @@ const controller = require('./controller');
 const router = express.Router();
 
 /* GET catalog listing. */
-router.route('/').post(controller.register);
+router.route('/register').post(controller.register);
+router.route('/login').post(controller.login);
 
 module.exports = router;
