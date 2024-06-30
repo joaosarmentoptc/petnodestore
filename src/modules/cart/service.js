@@ -8,7 +8,7 @@ module.exports = {
         return cart.find(cart => cart.id === id);
     },
     async addItem(item) {
-        //TODO
+        // TODO
         const product = catalogService.getProductById(item.id);
         return product;
     }

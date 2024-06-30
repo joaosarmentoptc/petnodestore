@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
+
 const env = process.env.NODE_ENV || 'development';
 const { jwtSecret } = config[env];
 
@@ -9,9 +10,9 @@ function verifyToken(req, res, next) {
     try {
         const decoded = jwt.verify(token, jwtSecret);
         req.userId = decoded.userId;
-        next();
+        return next();
     } catch (error) {
-        res.status(401).json({ error: 'Invalid token' });
+        return res.status(401).json({ error: 'Invalid token' });
     }
 };
 

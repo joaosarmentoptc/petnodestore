@@ -1,0 +1,17 @@
+env:
+  browser: true
+  commonjs: true
+  es2021: true
+
+extends:
+  - airbnb-base
+  - prettier
+
+parserOptions:
+  ecmaVersion: latest
+
+rules:
+  import/no-dynamic-require: off
+  global-require: off
+  array-callback-return: off
+  no-param-reassign: off

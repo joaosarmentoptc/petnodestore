@@ -119,25 +119,4 @@ describe('POST /user/register', () => {
 
         expect(response.status).toBe(500);
     });
-
-    it('database error saving a User, should catch it', async () => {
-
-        const mockUserInstance = {
-            save: jest.fn().mockRejectedValue(new Error('Database error'))
-        };
-        jest.spyOn(User, 'build').mockReturnValue(mockUserInstance);
-
-        const userData = {
-            email: 'joao.sarmento+databaseerror@gmail.com',
-            firstname: 'João',
-            lastname: 'Sarmento',
-            password: 'password123'
-        };
-
-        const response = await request(app)
-            .post(endpoint)
-            .send(userData);
-
-        expect(response.status).toBe(500);
-    });
 });

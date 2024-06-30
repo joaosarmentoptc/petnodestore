@@ -1,9 +1,10 @@
 const env = process.env.NODE_ENV;
 const joi = require("joi");
+const jwt = require('jsonwebtoken');
 const service = require("./service");
 const config = require('../../../config/config');
+
 const { jwtSecret, jwtExpires } = config[env];
-const jwt = require('jsonwebtoken');
 
 
 const registerSchema = joi.object({
@@ -18,16 +19,11 @@ const loginSchema = joi.object({
     password: joi.string().required(),
 });
 
-const validateEmail = (email) => {
-
-    return service.getUserByEmail(email)
-        .then(user => {
-            return !!user;
-        })
-        .catch(error => {
-            throw error;
-        });
-};
+const validateEmail = (email) => service.getUserByEmail(email)
+    .then(user => !!user)
+    .catch(error => {
+        throw error;
+    });
 
 module.exports = {
     async register(req, res, next) {
@@ -37,24 +33,26 @@ module.exports = {
             validatedBody = await registerSchema.validateAsync(req.body);
 
         } catch (error) {
-            res.status(400).json({ error: error.message });
-            return;
+            error.status = 400;
+            return next(error);
         }
 
         try {
             if (await validateEmail(validatedBody.email)) {
-                res.status(409).json({ error: 'Email already exists' });
-                return;
+                const conflictError = new Error('Email already exists');;
+                conflictError.status = 409;
+                throw conflictError;
             }
 
             const newUser = await service.register(validatedBody);
             const token = jwt.sign({ userId: newUser.id, email: newUser.email }, jwtSecret, { expiresIn: jwtExpires });
 
-            res.status(201).json({ newUser, token });
+            return res.status(201).json({ newUser, token });
 
         } catch (error) {
-            res.status(500).json({ error: error.message });
-            next(error);
+            if (!error.status)
+                error.status = 500;
+            return next(error);
         }
     },
 
@@ -63,10 +61,15 @@ module.exports = {
             const validatedBody = await loginSchema.validateAsync(req.body);
             const user = await service.validateLogin(validatedBody.email, validatedBody.password);
 
+            if (!user) {
+                const error = new Error('Invalid credentials');
+                error.status = 401;
+                next(error);
+            }
+
             const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpires });
             res.status(200).json({ token });
         } catch (error) {
-            res.status(401).json({ error: 'Invalid login' });
             next(error);
         }
     }
