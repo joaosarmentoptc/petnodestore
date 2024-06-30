@@ -1,6 +1,6 @@
-const env = process.env.NODE_ENV || 'development';
-const joi = require("joi")
-const service = require("./service")
+const env = process.env.NODE_ENV;
+const joi = require("joi");
+const service = require("./service");
 const config = require('../../../config/config');
 const { jwtSecret, jwtExpires } = config[env];
 const jwt = require('jsonwebtoken');
@@ -18,30 +18,42 @@ const loginSchema = joi.object({
     password: joi.string().required(),
 });
 
-const emailExists = async (email) => {
-    const results = await service.getUserByEmail(email);
+const validateEmail = (email) => {
 
-    if (results)
-        return true;
-    return false;
-
-}
+    return service.getUserByEmail(email)
+        .then(user => {
+            return !!user;
+        })
+        .catch(error => {
+            throw error;
+        });
+};
 
 module.exports = {
     async register(req, res, next) {
-        try {
+        let validatedBody;
 
-            if (await emailExists(req.body.email)) {
-                throw new Error('Email already exists');
+        try {
+            validatedBody = await registerSchema.validateAsync(req.body);
+
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
+
+        try {
+            if (await validateEmail(validatedBody.email)) {
+                res.status(409).json({ error: 'Email already exists' });
+                return;
             }
 
-            const validatedBody = await registerSchema.validateAsync(req.body);
             const newUser = await service.register(validatedBody);
-
             const token = jwt.sign({ userId: newUser.id, email: newUser.email }, jwtSecret, { expiresIn: jwtExpires });
 
             res.status(201).json({ newUser, token });
+
         } catch (error) {
+            res.status(500).json({ error: error.message });
             next(error);
         }
     },
@@ -54,6 +66,7 @@ module.exports = {
             const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpires });
             res.status(200).json({ token });
         } catch (error) {
+            res.status(401).json({ error: 'Invalid login' });
             next(error);
         }
     }

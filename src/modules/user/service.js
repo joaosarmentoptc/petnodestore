@@ -4,13 +4,14 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
 
-    async getUserByEmail(email) {
-        try {
-            const user = await User.findOne({ where: { email } });
-            return user;
-        } catch (error) {
-            throw error;
-        }
+    getUserByEmail(email) {
+        return User.findOne({ where: { email } })
+            .then(user => {
+                return user;
+            })
+            .catch(error => {
+                throw error;
+            });
     },
 
     async validateLogin(email, password) {
@@ -40,7 +41,6 @@ module.exports = {
 
             return user;
         } catch (error) {
-
             throw error;
         }
     }
