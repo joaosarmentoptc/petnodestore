@@ -1,11 +1,11 @@
-const cart = require('../../../public/static/carts.json');
+const cartMock = require('../../../public/static/carts.json');
 const catalogService = require('../catalog/service');
 
 
 module.exports = {
 
     async getAllItems(id) {
-        return cart.find(cart => cart.id === id);
+        return cartMock.find(cart => cart.id === id);
     },
     async addItem(item) {
         // TODO

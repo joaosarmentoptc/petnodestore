@@ -2,10 +2,12 @@ env:
   browser: true
   commonjs: true
   es2021: true
+  jest: true
 
 extends:
   - airbnb-base
   - prettier
+  - plugin:jest/recommended
 
 parserOptions:
   ecmaVersion: latest
@@ -15,3 +17,6 @@ rules:
   global-require: off
   array-callback-return: off
   no-param-reassign: off
+
+plugins:
+  - jest

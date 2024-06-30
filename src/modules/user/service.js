@@ -15,13 +15,13 @@ module.exports = {
         const user = await this.getUserByEmail(email);
 
         if (!user) {
-            return;
+            return null;
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
-            return;
+            return null;
         }
 
         return user;

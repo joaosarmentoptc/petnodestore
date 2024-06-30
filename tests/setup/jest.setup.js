@@ -1,17 +1,7 @@
 // jest.setup.js
+const bcrypt = require('bcrypt');
 const { sequelize } = require('../../models');
 const { User } = require('../../models');
-const bcrypt = require('bcrypt');
-
-module.exports = async () => {
-
-    await sequelize.sync({ force: true });
-    await seedDatabase();
-};
-
-async function seedDatabase() {
-    await createUsers();
-}
 
 async function createUsers() {
     await User.create({
@@ -21,3 +11,13 @@ async function createUsers() {
         password: await bcrypt.hash('password123', 10)
     });
 }
+
+async function seedDatabase() {
+    await createUsers();
+}
+
+module.exports = async () => {
+
+    await sequelize.sync({ force: true });
+    await seedDatabase();
+};

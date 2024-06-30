@@ -5,7 +5,6 @@ module.exports = {
     async index(req, res, next) {
         try {
             const { userId } = req;
-            console.log(userId);
             const results = await service.getAllItems(userId);
             res.status(200).json(results);
         } catch (error) {

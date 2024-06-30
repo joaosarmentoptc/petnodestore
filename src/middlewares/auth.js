@@ -9,6 +9,7 @@ function verifyToken(req, res, next) {
     if (!token) return res.status(401).json({ error: 'Access denied' });
     try {
         const decoded = jwt.verify(token, jwtSecret);
+
         req.userId = decoded.userId;
         return next();
     } catch (error) {
