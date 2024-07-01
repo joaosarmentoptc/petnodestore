@@ -64,7 +64,7 @@ module.exports = {
             if (!user) {
                 const error = new Error('Invalid credentials');
                 error.status = 401;
-                next(error);
+                throw error;
             }
 
             const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpires });
