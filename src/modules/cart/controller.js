@@ -25,6 +25,7 @@ module.exports = {
 
             res.status(201).json(results);
         } catch (error) {
+            error.status = 400;
             next(error);
         }
     },

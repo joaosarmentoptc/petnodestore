@@ -3,7 +3,15 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const verifyToken = require('./src/middlewares/auth');
+
+let verifyToken;
+
+if (process.env.NODE_ENV === 'test') {
+    verifyToken = require('./tests/helpers/mockAuth');
+}
+else {
+    verifyToken = require('./src/middlewares/auth');
+}
 
 const getRoute = (name) => require(`./src/modules/${name}/route`);
 
@@ -34,5 +42,6 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({ error: err.message });
 });
+
 
 module.exports = app;
