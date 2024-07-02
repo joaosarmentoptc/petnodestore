@@ -6,7 +6,7 @@ describe('POST /user/login', () => {
 
     const endpoint = '/user/login';
 
-    it('should login an existing user', async () => {
+    it('given an existing user, when logging in, then the user is authenticated', async () => {
         const loginData = {
             email: 'joao.sarmento@gmail.com',
             password: 'password123'
@@ -20,7 +20,7 @@ describe('POST /user/login', () => {
         expect(response.body).toHaveProperty('token');
     });
 
-    it('should not login a user with an invalid password', async () => {
+    it('given an invalid password, when logging in, then the user is not authenticated', async () => {
         const loginData = {
             email: 'joao.sarmento@gmail.com',
             password: 'invalidpassword'
@@ -33,7 +33,7 @@ describe('POST /user/login', () => {
         expect(response.status).toBe(401);
     });
 
-    it('should not login a non-existing user', async () => {
+    it('given a non-existing user, when logging in, then the user is not authenticated', async () => {
         const loginData = {
             email: 'nonexistinguser@gmail.com',
             password: 'password123'
@@ -55,7 +55,7 @@ describe('POST /user/register', () => {
 
     const endpoint = '/user/register';
 
-    it('should register a new user', async () => {
+    it('given a new user, when registering, then the user is created', async () => {
         const userData = {
             email: 'joao.sarmento2@gmail.com',
             firstname: 'João',
@@ -72,7 +72,7 @@ describe('POST /user/register', () => {
         expect(response.body).toHaveProperty('token');
     });
 
-    it('should not register an existing user', async () => {
+    it('given an existing user, when registering, then the user is not created', async () => {
         const userData = {
             email: 'joao.sarmento@gmail.com',
             firstname: 'João',
@@ -87,7 +87,7 @@ describe('POST /user/register', () => {
         expect(response.status).toBe(409);
     });
 
-    it('should not register a user with invalid data', async () => {
+    it('given user data with invalid format, when registering, then the user is not created', async () => {
         const userData = {
             password: 'password123',
             firstname: 'João',
@@ -101,7 +101,7 @@ describe('POST /user/register', () => {
         expect(response.status).toBe(400);
     });
 
-    it('database error fiding a User, should catch it', async () => {
+    it('given a database error, when registering, then the error is caught', async () => {
 
         jest.spyOn(User, 'findOne').mockRejectedValue(new Error('Database error'));
 
