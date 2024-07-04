@@ -9,7 +9,8 @@ module.exports = {
         port: process.env.DB_PORT || 5432,
         dialect: 'postgres',
         jwtSecret: process.env.JWT_SECRET || '409db9ba349ebdeaf9bd1efd7eb2c1a01abb5aba507a4e3cb97bf074959d7696',
-        jwtExpires: 28_800 // 8hours
+        jwtExpires: 28_800, // 8hours
+        productPaginate: process.env.PRODUCT_PAGINATE || 10
     },
     test: {
         username: process.env.DB_USERNAME || 'root',
@@ -19,6 +20,7 @@ module.exports = {
         port: process.env.DB_PORT || 5432,
         dialect: 'postgres',
         jwtSecret: process.env.JWT_SECRET || '409db9ba349ebdeaf9bd1efd7eb2c1a01abb5aba507a4e3cb97bf074959d7696',
-        jwtExpires: 28_800 // 8hours
+        jwtExpires: 28_800, // 8hours
+        productPaginate: process.env.PRODUCT_PAGINATE || 10
     }
 };

@@ -1,9 +1,17 @@
-const { Cart } = require('../../../models');
+const { Cart, Product } = require('../../../models');
 
 module.exports = {
 
     async getAllItems(userId) {
-        return Cart.findAll({ where: { user_id: userId } });
+        return Cart.findAll({
+            where: { user_id: userId },
+            attributes: ['quantity'],
+            include: {
+                model: Product,
+                as: 'product',
+                attributes: ['name', 'image', 'price', 'description', 'brand', 'stock']
+            }
+        });
     },
     async addItem(userId, { productId, quantity }) {
 
