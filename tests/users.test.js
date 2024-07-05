@@ -66,7 +66,6 @@ describe('POST /user/register', () => {
         const response = await request(app)
             .post(endpoint)
             .send(userData);
-
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('newUser');
         expect(response.body).toHaveProperty('token');

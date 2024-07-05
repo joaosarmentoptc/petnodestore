@@ -16,7 +16,12 @@ class Database {
 
             Database.instance = this;
         }
+    }
 
+    static getInstance() {
+        if (!Database.instance) {
+            Database.instance = new Database();
+        }
         return Database.instance;
     }
 
@@ -25,7 +30,7 @@ class Database {
     }
 }
 
-const instance = new Database();
+const instance = Database.getInstance();
 Object.freeze(instance);
 
 module.exports = instance;

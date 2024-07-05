@@ -1,31 +1,12 @@
 // jest.setup.js
-const bcrypt = require('bcrypt');
 const { sequelize } = require('../../models');
-const { User, Product } = require('../../models');
+const { createUserForTests, createProduct, createUser } = require('../helpers/createInstances');
 
-async function createUsers() {
-    await User.create({
-        email: 'joao.sarmento@gmail.com',
-        firstname: 'João',
-        lastname: 'Sarmento',
-        password: await bcrypt.hash('password123', 10)
-    });
-}
-
-async function createProducts() {
-    await Product.create({
-        name: 'Product 1',
-        price: 100,
-        stock: 10,
-        description: 'Product 1 description',
-        brand: 'Brand 1',
-        image: 'image1.png'
-    });
-}
 
 async function seedDatabase() {
-    await createUsers();
-    await createProducts();
+    await createUserForTests();
+    await createUser(5);
+    await createProduct(15);
 }
 
 module.exports = async () => {
