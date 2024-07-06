@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: petstore_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h localhost -U postgres; do
+          echo "Waiting for database to be ready..."
+          sleep 1
+        done
+
+    - name: Run tests
+      env:
+        #DB_HOST: postgres://postgres:postgres@localhost:5432/petstore_test
+        DB_HOST: localhost
+        DB_USERNAME: root
+        DB_PASSWORD: root
+        DB_NAME: petstore
+        DB_PORT: 5432
+        DB_NAME_TEST: petstore_test
+        DB_HOST_TEST: localhost
+        JWT_SECRET: 409db9ba349ebdeaf9bd1efd7eb2c1a01abb5aba507a4e3cb97bf074959d7696
+        PRODUCT_PAGINATE: 10
+      run: npm test
