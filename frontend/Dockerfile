@@ -9,9 +9,8 @@ COPY package*.json $APP/
 RUN npm install
 RUN npm update
 
-
 COPY . $APP
 
-EXPOSE 3000
+EXPOSE 5173
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

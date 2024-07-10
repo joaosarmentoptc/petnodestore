@@ -45,7 +45,10 @@ module.exports = {
             }
 
             const newUser = await service.register(validatedBody);
-            const token = jwt.sign({ userId: newUser.id, email: newUser.email }, jwtSecret, { expiresIn: jwtExpires });
+            const token = jwt.sign(
+                { userId: newUser.id, email: newUser.email, firstname: newUser.firstname, lastname: newUser.lastname }, 
+                jwtSecret, 
+                { expiresIn: jwtExpires });
 
             return res.status(201).json({ newUser, token });
 

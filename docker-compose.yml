@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  app:
+  backend:
     build: .
     container_name: petstore-backend
     env_file: .env
@@ -21,6 +21,18 @@ services:
       - db
     volumes:
       - .:/app
+      - /app/node_modules
+  
+  frontend:
+    build: ./frontend
+    container_name: petstore-frontend
+    env_file: ./frontend/.env
+    ports:
+      - "8080:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
       - /app/node_modules
 
 volumes:
