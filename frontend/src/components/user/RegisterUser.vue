@@ -89,7 +89,9 @@
         </div>
 
         <!-- Error message -->
-        <p v-if="error" class="has-text-danger">{{ error }}</p>
+        <div v-if="error" class="notification is-danger is-light">
+          {{ error }}
+        </div>
       </form>
     </div>
   </div>
@@ -142,15 +144,14 @@ export default {
         this.$router.push('/') // Redirect to home page
         this.clearForm()
       } catch (err) {
-        console.error(err)
-        this.error = 'Registration failed'
+        this.error = err
       }
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .content {
   max-width: 500px;
   margin: auto;

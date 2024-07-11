@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
 
 const env = process.env.NODE_ENV || 'development';
-const { jwtSecret } = config[env];
+const { jwtSecret, jwtExpires } = config[env];
 
 function verifyToken(req, res, next) {
     const token = req.header('Authorization');
@@ -17,4 +17,13 @@ function verifyToken(req, res, next) {
     }
 };
 
-module.exports = verifyToken;
+function signJwt(userData){
+    return jwt.sign({ userId: userData.id, email: userData.email, firstname: userData.firstname, lastname: userData.lastname }, 
+                jwtSecret, 
+                { expiresIn: jwtExpires });
+}
+
+module.exports = {
+    verifyToken, 
+    signJwt
+};

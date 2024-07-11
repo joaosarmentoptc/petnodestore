@@ -1,10 +1,6 @@
-const env = process.env.NODE_ENV;
 const joi = require("joi");
-const jwt = require('jsonwebtoken');
 const service = require("./service");
-const config = require('../../../config/config');
-
-const { jwtSecret, jwtExpires } = config[env];
+const { signJwt } = require('../../middlewares/auth');
 
 
 const registerSchema = joi.object({
@@ -45,10 +41,7 @@ module.exports = {
             }
 
             const newUser = await service.register(validatedBody);
-            const token = jwt.sign(
-                { userId: newUser.id, email: newUser.email, firstname: newUser.firstname, lastname: newUser.lastname }, 
-                jwtSecret, 
-                { expiresIn: jwtExpires });
+            const token = signJwt(newUser);
 
             return res.status(201).json({ newUser, token });
 
@@ -70,7 +63,7 @@ module.exports = {
                 throw error;
             }
 
-            const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, { expiresIn: jwtExpires });
+            const token = signJwt(user);
             res.status(200).json({ token });
         } catch (error) {
             next(error);

@@ -13,19 +13,29 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-end">
+          <span v-if="user" class="navbar-item">Welcome, {{ user.firstname }}</span>
           <router-link
             v-if="isAuthenticated"
             @click="logout"
             :to="{ name: 'homePage' }"
             class="navbar-item"
-            ><span>Logout</span></router-link
           >
-          <router-link v-if="!isAuthenticated" to="#" class="navbar-item"
-            ><span>Login</span></router-link
-          >
-          <router-link v-if="!isAuthenticated" :to="{ name: 'registerUser' }" class="navbar-item"
-            ><span>Register</span></router-link
-          >
+            <span class="icon-text">
+              <span class="icon is-medium">
+                <i class="fas fa-sign-out-alt"></i>
+              </span>
+            </span>
+          </router-link>
+          <div class="navbar-item pr-0">
+            <router-link v-if="!isAuthenticated" :to="{ name: 'loginUser' }"
+              ><button class="button">Login</button></router-link
+            >
+          </div>
+          <div class="navbar-item">
+            <router-link v-if="!isAuthenticated" :to="{ name: 'registerUser' }"
+              ><button class="button is-inverted">Register</button></router-link
+            >
+          </div>
         </div>
       </div>
     </nav>
@@ -51,6 +61,9 @@ export default {
     })
   },
   computed: {
+    user() {
+      return this.$store.getters['users/currentUser']
+    },
     isAuthenticated() {
       return this.$store.getters['users/isAuthenticated']
     }

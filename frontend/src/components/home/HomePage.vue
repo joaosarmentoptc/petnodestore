@@ -1,9 +1,7 @@
 <template>
-  <div class="content">
-    <h1 v-if="user ">{{ `Hello, ${user.firstname} ${user.lastname}!` }}!</h1>
-    <h1 v-else>Hello, guest!</h1>
-
-    <p>{{ user }}</p>
+  <div class="content"></div>
+  <div v-for="product in catalog" :key="product.id">
+    {{ product }}
   </div>
 </template>
 
@@ -11,8 +9,8 @@
 export default {
   name: 'HomePage',
   computed: {
-    user() {
-      return this.$store.getters['users/currentUser']
+    catalog() {
+      return this.$store.state.catalog.catalog
     }
   }
 }

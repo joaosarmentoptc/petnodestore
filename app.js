@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'test') {
     verifyToken = require('./tests/helpers/mockAuth');
 }
 else {
-    verifyToken = require('./src/middlewares/auth');
+    verifyToken = require('./src/middlewares/auth').verifyToken;
 }
 
 const getRoute = (name) => require(`./src/modules/${name}/route`);

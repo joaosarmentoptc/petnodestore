@@ -17,15 +17,30 @@ export default {
   },
   actions: {
     async register({ commit, dispatch }, userData) {
-      const res = await axios.post('/api/user/register', userData)
-      if (res.status !== 201) {
-        throw new Error('Failed to register user')
+      try {
+        const res = await axios.post('/api/user/register', userData)
+
+        const token = res.data.token
+        localStorage.setItem('jwtToken', token)
+        commit('setAuthentication', true)
+        dispatch('getUserFromToken')
+
+        return res.data
+      } catch (error) {
+        throw new Error(error.response.data.error)
       }
-      const token = res.data.token
-      localStorage.setItem('jwtToken', token)
-      commit('setAuthentication', true)
-      dispatch('getUserFromToken')
-      return res.data
+    },
+
+    async login({ commit, dispatch }, userData) {
+      try {
+        const res = await axios.post('/api/user/login', userData)
+        const token = res.data.token
+        localStorage.setItem('jwtToken', token)
+        commit('setAuthentication', true)
+        dispatch('getUserFromToken')
+      } catch (error) {
+        throw new Error(error.response.data.error)
+      }
     },
 
     logout({ commit, dispatch }) {
