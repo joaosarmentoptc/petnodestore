@@ -66,9 +66,9 @@ export default {
         }
       } catch (error) {
         console.error('Error decoding token', error)
+      } finally {
         commit('updateCurrentUser', user)
       }
-      commit('updateCurrentUser', user)
     }
   },
   getters: {
