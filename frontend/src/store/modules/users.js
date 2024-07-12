@@ -40,6 +40,8 @@ export default {
         dispatch('getUserFromToken')
       } catch (error) {
         throw new Error(error.response.data.error)
+      } finally {
+        dispatch('cart/getCartItems', null, { root: true })
       }
     },
 

@@ -70,7 +70,7 @@
 import { mapActions, useStore } from 'vuex'
 import { onMounted } from 'vue'
 
-const PAGINATION_LIMIT = import.meta.env.VITE_PAGINATION_LIMIT
+const PAGINATION_LIMIT = Number(import.meta.env.VITE_PAGINATION_LIMIT)
 
 export default {
   name: 'HomePage',

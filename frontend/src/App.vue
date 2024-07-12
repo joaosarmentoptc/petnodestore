@@ -14,6 +14,11 @@
       <div class="navbar-menu">
         <div class="navbar-end">
           <span v-if="user" class="navbar-item">Welcome, {{ user.firstname }}</span>
+          <router-link v-if="isAuthenticated" class="navbar-item" :to="{ name: 'shoppingCart' }">
+            <div class="icon has-badge" :data-badge="cart.length">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+          </router-link>
           <router-link
             v-if="isAuthenticated"
             @click="logout"
@@ -40,8 +45,8 @@
       </div>
     </nav>
   </header>
-  <main>
-    <div class="section is-medium has-background-light">
+  <main class="has-background-light">
+    <div class="section is-medium">
       <router-view />
     </div>
   </main>
@@ -58,6 +63,7 @@ export default {
 
     onMounted(() => {
       store.dispatch('users/getUserFromToken')
+      store.dispatch('cart/getCartItems')
     })
   },
   computed: {
@@ -66,6 +72,9 @@ export default {
     },
     isAuthenticated() {
       return this.$store.getters['users/isAuthenticated']
+    },
+    cart() {
+      return this.$store.state.cart.cart
     }
   },
   methods: {
@@ -78,4 +87,24 @@ export default {
 
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css';
+
+main {
+  min-height: 100vh;
+}
+.has-badge {
+  position: relative;
+  display: inline-block;
+}
+.has-badge::after {
+  content: attr(data-badge);
+  position: absolute;
+  top: -25x;
+  right: 0px;
+  background-color: #ff3860; /* Bulma's danger color */
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.5em;
+  font-size: 0.5rem;
+  font-weight: bold;
+}
 </style>
