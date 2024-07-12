@@ -40,11 +40,11 @@
       </div>
     </nav>
   </header>
-  <div class="section is-medium">
-    <main>
+  <main>
+    <div class="section is-medium has-background-light">
       <router-view />
-    </main>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>
