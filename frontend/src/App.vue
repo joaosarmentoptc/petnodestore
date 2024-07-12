@@ -15,7 +15,7 @@
         <div class="navbar-end">
           <span v-if="user" class="navbar-item">Welcome, {{ user.firstname }}</span>
           <router-link v-if="isAuthenticated" class="navbar-item" :to="{ name: 'shoppingCart' }">
-            <div class="icon has-badge" :data-badge="cart.length">
+            <div class="icon" :class="{ 'has-badge': cart?.length }" :data-badge="cart?.length">
               <i class="fas fa-shopping-cart"></i>
             </div>
           </router-link>

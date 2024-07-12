@@ -29,10 +29,19 @@
 
               <div class="field has-addons has-addons-right">
                 <div class="control">
-                  <input class="input" type="number" placeholder="Qty" />
+                  <input
+                    class="input"
+                    type="number"
+                    placeholder="Qty"
+                    value="1"
+                    :ref="'qty' + product.id"
+                  />
                 </div>
                 <div class="control">
-                  <button class="button is-info">
+                  <button
+                    class="button is-info"
+                    @click="addToCart(product.id, $refs['qty' + product.id][0].value)"
+                  >
                     <div class="icon"><i class="fas fa-cart-plus"></i></div>
                   </button>
                 </div>
@@ -89,6 +98,7 @@ export default {
   },
   methods: {
     ...mapActions('catalog', ['getProductList']),
+    ...mapActions('cart', ['addItemToCart']),
     nextPage() {
       this.currentOffset += PAGINATION_LIMIT
       this.getProductList(this.currentOffset)
@@ -96,6 +106,10 @@ export default {
     previousPage() {
       this.currentOffset -= PAGINATION_LIMIT
       this.getProductList(this.currentOffset)
+    },
+
+    addToCart(productId, quantity) {
+      this.addItemToCart({ productId, quantity })
     }
   },
   computed: {
