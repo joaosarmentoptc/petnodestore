@@ -109,6 +109,8 @@ export default {
     },
 
     addToCart(productId, quantity) {
+      if (!this.$store.state.users.isAuthenticated) this.$router.push({ name: 'loginUser' })
+
       this.addItemToCart({ productId, quantity })
     }
   },

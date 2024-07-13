@@ -51,7 +51,7 @@ export default {
       dispatch('getUserFromToken')
     },
 
-    getUserFromToken({ commit }) {
+    getUserFromToken({ commit, dispatch }) {
       const token = localStorage.getItem('jwtToken')
 
       let user = {}
@@ -59,6 +59,10 @@ export default {
       try {
         if (token) {
           const decoded = jwtDecode(token)
+          if (!decoded.exp || decoded.exp < Date.now() / 1000) {
+            dispatch('logout')
+            return
+          }
           user = {
             email: decoded.email,
             firstname: decoded.firstname,

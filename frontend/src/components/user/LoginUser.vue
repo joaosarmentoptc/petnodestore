@@ -67,7 +67,8 @@ export default {
 
       try {
         await this.login(loginData)
-        this.$router.push('/') // Redirect to home page
+        const redirect = this.$route?.query?.redirect || { name: 'homePage' }
+        this.$router.push(redirect)
         this.clearForm()
       } catch (err) {
         this.error = err
