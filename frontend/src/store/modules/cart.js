@@ -1,5 +1,12 @@
 import axios from 'axios'
 
+const prepareRequest = () => {
+  const token = localStorage.getItem('jwtToken')
+  if (!token) return null
+  const headers = { Authorization: token }
+  return headers
+}
+
 export default {
   namespaced: true,
   state: {
@@ -16,9 +23,8 @@ export default {
     async getCartItems({ commit }) {
       let cart = []
       try {
-        const token = localStorage.getItem('jwtToken')
-        if (!token) return
-        const headers = { Authorization: token }
+        const headers = prepareRequest()
+        if (!headers) return
         cart = await axios.get('api/cart', { headers: headers })
       } catch (error) {
         console.error(error)
@@ -28,9 +34,8 @@ export default {
     },
     async addItemToCart({ dispatch }, requestData) {
       try {
-        const token = localStorage.getItem('jwtToken')
-        if (!token) return
-        const headers = { Authorization: token }
+        const headers = prepareRequest()
+        if (!headers) return
         const quantity = Number(requestData.quantity)
         const productId = Number(requestData.productId)
         const res = await axios.put('api/cart', { quantity, productId }, { headers: headers })
@@ -39,6 +44,18 @@ export default {
         console.error(error)
       } finally {
         dispatch('getCartItems')
+      }
+    },
+    async deleteItemFromCart({ dispatch }, { productId, quantity }) {
+      try {
+        productId = Number(productId)
+        quantity = Number(quantity)
+        const headers = prepareRequest()
+        if (!headers) return
+        await axios.delete('api/cart', { headers, data: { productId, quantity } })
+        dispatch('getCartItems')
+      } catch (error) {
+        console.error(error)
       }
     }
   }

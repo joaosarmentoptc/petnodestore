@@ -9,7 +9,7 @@ module.exports = {
             include: {
                 model: Product,
                 as: 'product',
-                attributes: ['name', 'image', 'price', 'description', 'brand', 'stock']
+                attributes: ['id','name', 'image', 'price', 'description', 'brand', 'stock']
             }
         });
     },
